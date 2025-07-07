@@ -1,0 +1,347 @@
+# TensorFuse Git Ignore
+
+#------------------------------------------------------------------------------
+# Build artifacts (CMake / Ninja / Make)
+#------------------------------------------------------------------------------
+build/
+build-*/
+cmake-build-*/
+*_build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# Object / binary outputs
+*.o
+*.obj
+*.lo
+*.a
+*.la
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# CUDA intermediates
+*.ptx
+*.cubin
+*.fatbin
+
+#------------------------------------------------------------------------------
+# AutoTuner cache files
+#------------------------------------------------------------------------------
+tensorfuse_cache_*.json
+autotuner_cache/
+cache_packages/
+*.autotuner
+config_cache/
+
+#------------------------------------------------------------------------------
+# Test artifacts
+#------------------------------------------------------------------------------
+# Test results and reports
+test_results/
+Testing/
+*.xml
+gtest_output.xml
+cppcheck-report.xml
+bandit-report.json
+safety-report.json
+coverage.xml
+coverage.info
+*.gcov
+*.gcda
+*.gcno
+
+# Performance test outputs
+performance_results*.txt
+performance_results*.json
+benchmark_results/
+*.qdrep   # Nsight Compute reports
+*.ncu-rep # Nsight Compute reports
+*.nsys-rep
+*.nvvp
+
+# Memory and profiling reports
+memory_report.txt
+valgrind_output.txt
+*.callgrind
+*.memcheck
+
+#------------------------------------------------------------------------------
+# Python artifacts
+#------------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyc
+*.pyd
+*.egg-info/
+dist/
+*.whl
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage_html/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# Jupyter Notebooks
+*.ipynb_checkpoints
+.ipynb_checkpoints/
+
+#------------------------------------------------------------------------------
+# Documentation build
+#------------------------------------------------------------------------------
+docs/_build/
+docs/_static/
+docs/_templates/
+site/
+.readthedocs.yml.bak
+
+#------------------------------------------------------------------------------
+# IDE / Editor files
+#------------------------------------------------------------------------------
+.vscode/
+.idea/
+*.code-workspace
+*.sw?
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# CLion
+cmake-build-*/
+.idea/
+
+# Visual Studio
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+.vs/
+out/
+
+#------------------------------------------------------------------------------
+# Package managers
+#------------------------------------------------------------------------------
+# Conan
+conanbuild/
+conanexport/
+conan.lock
+conandata.yml
+
+# vcpkg
+vcpkg_installed/
+.vcpkg-root
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+#------------------------------------------------------------------------------
+# Docker artifacts
+#------------------------------------------------------------------------------
+# Docker build context
+.dockerignore.bak
+docker-compose.override.yml
+.docker/
+
+# Container logs
+*.log
+
+#------------------------------------------------------------------------------
+# CI/CD artifacts
+#------------------------------------------------------------------------------
+.github/workflows/*.bak
+*.github-bak
+ci_output/
+artifacts/
+
+#------------------------------------------------------------------------------
+# Security and credentials
+#------------------------------------------------------------------------------
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+.env
+.env.local
+.env.*.local
+credentials.json
+
+#------------------------------------------------------------------------------
+# Temporary files
+#------------------------------------------------------------------------------
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.rej
+
+#------------------------------------------------------------------------------
+# OS generated files
+#------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+#------------------------------------------------------------------------------
+# Development tools
+#------------------------------------------------------------------------------
+# Static analysis
+.clang-tidy
+.cppcheck/
+static_analysis/
+
+# Formatting
+.clang-format-backup
+*.formatted
+
+# Debugging
+core
+*.core
+gdb.txt
+*.dmp
+
+#------------------------------------------------------------------------------
+# Machine learning / Data
+#------------------------------------------------------------------------------
+# Datasets
+data/
+datasets/
+*.csv
+*.npy
+*.npz
+*.h5
+*.hdf5
+
+# Model checkpoints
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+*.model
+
+# TensorBoard logs
+runs/
+logs/
+tensorboard/
+
+# Weights & Biases
+wandb/
+
+#------------------------------------------------------------------------------
+# Generated files
+#------------------------------------------------------------------------------
+# Auto-generated version files
+version.h
+version.cpp
+_version.py
+
+# Generated documentation
+*.md.bak
+API_DOCS.md
+
+# Generated scripts
+scripts/generated/
+
+#------------------------------------------------------------------------------
+# Large files / Downloads
+#------------------------------------------------------------------------------
+# Downloaded models
+models/
+*.bin
+*.safetensors
+
+# Third-party downloads
+downloads/
+extern/
+
+#------------------------------------------------------------------------------
+# Project-specific
+#------------------------------------------------------------------------------
+# Performance baselines
+baseline_*.txt
+performance_baseline.txt
+
+# Custom configurations
+local_config.json
+user_config.yml
+.tensorfuse/
+
+# Cache directories
+.cache/
+cache/
+
+# Benchmark data
+benchmark_data/
+profiling_data/
+
+#------------------------------------------------------------------------------
+# Language Server Protocol
+#------------------------------------------------------------------------------
+.ccls-cache/
+.clangd/
+compile_flags.txt
+
+#------------------------------------------------------------------------------
+# Additional exclusions
+#------------------------------------------------------------------------------
+# Backup files created by editors
+*~
+*.bak
+*.backup
+*.old
+
+# Archive files
+*.tar.gz
+*.zip
+*.7z
+*.rar
+
+# Media files (usually not needed in source)
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.avi
+
+# Allow specific important media files
+!docs/images/*.png
+!docs/assets/*.jpg
+!*.ico
+!logo.*
