@@ -33,10 +33,12 @@ __global__ void optimized_add_bias_gelu_kernel(
         int idx = row * N + col;
         
         // Add bias with proper beta scaling
+        // C = alpha * A * B + beta * bias
+        // Since alpha=1.0 and we're adding bias, we just add beta * bias
         float val = static_cast<float>(output[idx]) + beta * static_cast<float>(bias[col]);
         
-        // Optimized GELU activation using fast approximation
-        // GELU(x) = x * 0.5 * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3)))
+        // More accurate GELU activation
+        // GELU(x) = 0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3)))
         const float kAlpha = 0.7978845608028654f;  // sqrt(2/pi)
         const float kBeta = 0.044715f;
         const float kHalf = 0.5f;
@@ -44,9 +46,9 @@ __global__ void optimized_add_bias_gelu_kernel(
         float x_cubed = val * val * val;
         float inner = kAlpha * (val + kBeta * x_cubed);
         
-        // Use faster tanh approximation for better performance
+        // Use more accurate tanh for better precision
         float tanh_val = tanhf(inner);
-        float gelu_result = val * kHalf * (1.0f + tanh_val);
+        float gelu_result = kHalf * val * (1.0f + tanh_val);
         
         output[idx] = static_cast<T>(gelu_result);
     }
@@ -61,7 +63,7 @@ struct OptimizedFusedGemmBiasGeluSM80_FP32 {
     
     // Use same layout as original working kernel
     using LayoutA = cutlass::layout::RowMajor;
-    using LayoutB = cutlass::layout::ColumnMajor;  // Match original working kernel
+    using LayoutB = cutlass::layout::RowMajor;  // Both matrices are row-major
     using LayoutC = cutlass::layout::RowMajor;
     
     // SIMT instruction shape for FP32
@@ -118,7 +120,7 @@ struct OptimizedFusedGemmBiasGeluSM80_FP16 {
     
     // Use same layout as original working kernel
     using LayoutA = cutlass::layout::RowMajor;
-    using LayoutB = cutlass::layout::ColumnMajor;  // Match original working kernel
+    using LayoutB = cutlass::layout::RowMajor;  // Both matrices are row-major
     using LayoutC = cutlass::layout::RowMajor;
     
     // Use proper FP16 Tensor Core instruction shape
@@ -129,7 +131,7 @@ struct OptimizedFusedGemmBiasGeluSM80_FP16 {
     using WarpShape = cutlass::gemm::GemmShape<64, 64, 32>;  // Match K dimension
     
     using ArchTag = cutlass::arch::Sm80;
-    using OperatorClass = cutlass::arch::OpClassSimt;  // Stay with SIMT for now
+    using OperatorClass = cutlass::arch::OpClassTensorOp;  // Use Tensor Core operations
     
     // Conservative staging
     static constexpr int Stages = 2;
@@ -184,7 +186,7 @@ TensorFuseStatus launch_optimized_fused_gemm_bias_gelu(
     
     // Leading dimensions with proper stride calculation
     int lda = K;  // A is [M x K] in RowMajor, so lda = K
-    int ldb = K;  // B is [K x N] in ColumnMajor, so ldb = K (leading dimension = rows)
+    int ldb = N;  // B is [K x N] in RowMajor, so ldb = N (leading dimension = columns)
     int ldc = N;  // C is [M x N] in RowMajor, so ldc = N
     
     // Create GEMM arguments (no bias fusion in epilogue)
@@ -268,6 +270,10 @@ TensorFuseStatus optimized_fused_gemm_bias_gelu_fp32(
     
     cudaDeviceProp props;
     cudaGetDeviceProperties(&props, device);
+    
+    // Debug output
+    printf("DEBUG: Using FP32 optimized kernel for SM%d.%d\n", props.major, props.minor);
+    printf("DEBUG: Problem size: M=%d, N=%d, K=%d, alpha=%f, beta=%f\n", M, N, K, alpha, beta);
     
     // Use optimized Tensor Core kernel for SM80+
     if (props.major >= 8) {
