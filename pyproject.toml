@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "pybind11>=2.10.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tensorfuse"
+version = "1.0.0"
+description = "High-performance tensor computation library with CUDA acceleration"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Vishal Vaka", email = "vishalvaka@example.com"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: C++",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.19.0",
+    "torch>=1.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black",
+    "flake8",
+    "mypy",
+]
+benchmark = [
+    "matplotlib",
+    "seaborn",
+    "pandas",
+]
+
+[project.urls]
+Homepage = "https://github.com/vishalvaka/tensorfuse"
+Documentation = "https://github.com/vishalvaka/tensorfuse#readme"
+Repository = "https://github.com/vishalvaka/tensorfuse.git"
+Issues = "https://github.com/vishalvaka/tensorfuse/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src/python"}
+packages = ["tensorfuse"]
+
+[tool.setuptools.package-data]
+tensorfuse = ["*.so", "*.pyd"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$' 

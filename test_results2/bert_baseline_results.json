@@ -1,0 +1,32 @@
+{
+  "bert_base_benchmark": {
+    "config": {
+      "batch_size": 32,
+      "seq_len": 128,
+      "hidden_dim": 768,
+      "ffn_dim": 3072,
+      "warmup_iterations": 10,
+      "benchmark_iterations": 100
+    },
+    "results": [
+      {
+        "name": "cuBLASLt_baseline",
+        "avg_time_ms": 2.78848,
+        "min_time_ms": 1.9415,
+        "max_time_ms": 3.83898,
+        "std_dev_ms": 0.385862,
+        "tflops": 13.8713,
+        "memory_bandwidth_gbps": 33.849
+      },
+      {
+        "name": "TensorFuse_fused",
+        "avg_time_ms": 2.71339,
+        "min_time_ms": 1.93434,
+        "max_time_ms": 4.01613,
+        "std_dev_ms": 0.323663,
+        "tflops": 14.2552,
+        "memory_bandwidth_gbps": 34.7857
+      }
+    ]
+  }
+}

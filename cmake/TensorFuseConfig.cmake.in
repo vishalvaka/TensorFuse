@@ -1,0 +1,32 @@
+# TensorFuseConfig.cmake.in
+# Config file for TensorFuse package
+
+@PACKAGE_INIT@
+
+set(TENSORFUSE_VERSION @PROJECT_VERSION@)
+
+# Check if TensorFuse was built with required components
+set(TENSORFUSE_FOUND TRUE)
+
+# Dependencies
+find_dependency(CUDAToolkit 12.4 REQUIRED)
+
+# Find CUTLASS
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR})
+find_dependency(CUTLASS 3.5 REQUIRED)
+
+# Check for optional FP8 support
+if(@TENSORFUSE_ENABLE_FP8@)
+    find_dependency(TransformerEngine 1.9 QUIET)
+    if(NOT TransformerEngine_FOUND)
+        message(WARNING "Transformer Engine not found. FP8 support will be disabled.")
+    endif()
+endif()
+
+# Import targets
+include(${CMAKE_CURRENT_LIST_DIR}/TensorFuseTargets.cmake)
+
+# Set up interface properties
+get_target_property(TENSORFUSE_INCLUDE_DIRS TensorFuse::TensorFuse INTERFACE_INCLUDE_DIRECTORIES)
+
+check_required_components(TensorFuse) 

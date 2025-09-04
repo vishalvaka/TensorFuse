@@ -1,0 +1,30 @@
+services:
+  tensorfuse:
+    build:
+      context: .
+      dockerfile: docker/cuda12.6-runtime.Dockerfile
+    image: tensorfuse:latest
+    container_name: tensorfuse-dev
+    volumes:
+      - .:/workspace
+      - ./cache:/workspace/cache
+    ports:
+      - "8888:8888"   # Jupyter Lab
+      - "8889:8889"   # Additional port
+      - "8890:8890"   # Additional port
+    environment:
+      - TENSORFUSE_CUDA_ARCHITECTURES=89;90
+      - TENSORFUSE_BUILD_TYPE=Release
+      - TENSORFUSE_ENABLE_PROFILING=ON
+      - TENSORFUSE_ENABLE_FP8=ON
+      - TENSORFUSE_START_JUPYTER=false
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    stdin_open: true
+    tty: true
+    working_dir: /workspace 
